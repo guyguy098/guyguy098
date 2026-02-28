@@ -890,6 +890,7 @@
 			font-size: 0.9rem;
 			direction: ltr;
 			text-align: left;
+			font-family: Arial, 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
 		}
 
 		.custom-dropdown-item:hover {
@@ -2393,51 +2394,56 @@
         </div>
         <div class="mobile-tool-section">
             <h4><i class="fas fa-newspaper"></i> News Sites</h4>
-            <select class="mobile-tool-select" id="mobileNewsSites" dir="ltr">
-                <option value="" disabled selected style="display:none;">Select News Site...</option>
-                <option disabled style="color: #aaa; font-style: italic;">🇮🇱 Israeli</option>
-				<option value="https://www.n12.co.il/">N12</option>
-                <option value="https://www.0404.co.il/">0404</option>
-                <option value="https://www.jpost.com/">Jerusalem Post</option>
-                <option value="https://www.timesofisrael.com/">Times of Israel</option>
-                <option value="https://www.zman.co.il/" dir="ltr">Zman Israel</option>
-                <option value="https://rotter.net/">Rotter</option>
-                <option value="https://www.i24news.tv/en">i24News</option>
-                <option value="https://www.nziv.net/" dir="ltr">Nziv.net</option>
-				<option disabled style="color: #555;">──────────────────</option>
-                <option disabled style="color: #aaa; font-style: italic;">🌍 Western</option>
-				<option value="https://edition.cnn.com/">CNN</option>
-                <option value="https://www.nbcnews.com/">NBC</option>
-                <option value="https://apnews.com/">AP News</option>
-                <option value="https://www.nytimes.com/international/">New York Times</option>
-                <option value="https://www.bbc.com/">BBC</option>
-                <option value="https://www.reuters.com/">Reuters</option>
-                <option value="https://www.wsj.com/">Wall Street Journal</option>
-                <option value="https://www.washingtonpost.com/">Washington Post</option>
-                <option value="https://www.foxnews.com/">Fox News</option>
-                <option value="https://www.washingtoninstitute.org/">Washington Institute</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">🇶🇦 Qatar</option>
-                <option value="https://www.aljazeera.com/">Al-Jazeera</option>
-                <option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">🇸🇦 Saudi Arabia</option>
-				<option value="https://english.almayadeen.net/">Al-Mayadeen</option>
-                <option value="https://www.alhadath.net/">Al-Hadath</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">🇮🇷 Iran</option>
-				<option value="https://www.alalam.ir/">Al-Alam</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">☠️ Hezbollah</option>
-				<option value="https://english.alarabiya.net/">Al-Arabiya</option>
-                <option value="https://english.almanar.com.lb/">Al-Manar</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">🇺🇸 US-funded Arabic</option>
-				<option value="https://www.alhurra.com/">Al-Hurra</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">📈 Other</option>
-				<option value="https://polymarket.com/">PolyMarket</option>
-				<option value="https://usstrikeradar.com/">Strike Radar</option>
-            </select>
+            <div class="custom-dropdown" id="newsSitesDropdown">
+				<button class="custom-dropdown-selected" onclick="toggleDropdown('newsSitesDropdown')">
+					<span>Select News Site...</span>
+					<i class="fas fa-chevron-down"></i>
+				</button>
+				<div class="custom-dropdown-list" id="newsSitesDropdown-list">
+					<div class="custom-dropdown-item disabled">🇮🇱 Israeli</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.n12.co.il/', 'newsSitesDropdown')">N12</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.0404.co.il/', 'newsSitesDropdown')">0404</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.jpost.com/', 'newsSitesDropdown')">Jerusalem Post</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.timesofisrael.com/', 'newsSitesDropdown')">Times of Israel</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.zman.co.il/', 'newsSitesDropdown')">Zman Israel</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://rotter.net/', 'newsSitesDropdown')">Rotter</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.i24news.tv/en', 'newsSitesDropdown')">i24News</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.nziv.net/', 'newsSitesDropdown')">Nziv.net</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">🌍 Western</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://edition.cnn.com/', 'newsSitesDropdown')">CNN</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.nbcnews.com/', 'newsSitesDropdown')">NBC</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://apnews.com/', 'newsSitesDropdown')">AP News</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.nytimes.com/international/', 'newsSitesDropdown')">New York Times</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.bbc.com/', 'newsSitesDropdown')">BBC</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.reuters.com/', 'newsSitesDropdown')">Reuters</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.wsj.com/', 'newsSitesDropdown')">Wall Street Journal</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.washingtonpost.com/', 'newsSitesDropdown')">Washington Post</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.foxnews.com/', 'newsSitesDropdown')">Fox News</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.washingtoninstitute.org/', 'newsSitesDropdown')">Washington Institute</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">🇶🇦 Qatar</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.aljazeera.com/', 'newsSitesDropdown')">Al-Jazeera</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">🇸🇦 Saudi Arabia</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://english.almayadeen.net/', 'newsSitesDropdown')">Al-Mayadeen</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.alhadath.net/', 'newsSitesDropdown')">Al-Hadath</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">🇮🇷 Iran</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.alalam.ir/', 'newsSitesDropdown')">Al-Alam</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">☠️ Hezbollah</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://english.alarabiya.net/', 'newsSitesDropdown')">Al-Arabiya</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://english.almanar.com.lb/', 'newsSitesDropdown')">Al-Manar</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">🇺🇸 US-funded Arabic</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.alhurra.com/', 'newsSitesDropdown')">Al-Hurra</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">📈 Other</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://polymarket.com/', 'newsSitesDropdown')">PolyMarket</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://usstrikeradar.com/', 'newsSitesDropdown')">Strike Radar</div>
+				</div>
+			</div>
         </div>
         <div class="mobile-tool-section">
             <h4><i class="fas fa-search"></i> Search Location</h4>
