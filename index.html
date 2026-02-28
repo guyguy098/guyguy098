@@ -841,6 +841,75 @@
 		select, option {
 			font-family: Arial, 'Noto Color Emoji', sans-serif;
 		}
+		
+		.custom-dropdown {
+			position: relative;
+			width: 100%;
+		}
+
+		.custom-dropdown-selected {
+			width: 100%;
+			padding: 0.75rem;
+			background: #1a1a2e;
+			border: 1px solid rgba(255,255,255,0.2);
+			border-radius: 6px;
+			color: white;
+			font-size: 1rem;
+			cursor: pointer;
+			text-align: left;
+			direction: ltr;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.custom-dropdown-list {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: #1a1a2e;
+			border: 1px solid rgba(255,255,255,0.2);
+			border-radius: 6px;
+			z-index: 9999;
+			max-height: 300px;
+			overflow-y: auto;
+			direction: ltr;
+			text-align: left;
+		}
+
+		.custom-dropdown-list.open {
+			display: block;
+		}
+
+		.custom-dropdown-item {
+			padding: 0.6rem 0.75rem;
+			color: white;
+			cursor: pointer;
+			font-size: 0.9rem;
+			direction: ltr;
+			text-align: left;
+		}
+
+		.custom-dropdown-item:hover {
+			background: rgba(255,255,255,0.1);
+		}
+
+		.custom-dropdown-item.disabled {
+			color: #aaa;
+			font-style: italic;
+			cursor: default;
+			font-size: 0.8rem;
+			padding: 0.3rem 0.75rem;
+		}
+
+		.custom-dropdown-item.separator {
+			border-top: 1px solid #444;
+			padding: 0;
+			margin: 2px 0;
+		}
+
     </style>
 </head>
 <body>
@@ -2249,7 +2318,29 @@
 			document.body.style.overflow = 'auto';
 		}
 
-		
+		function toggleDropdown(id) {
+			const list = document.getElementById(id + '-list');
+			// Close all other dropdowns first
+			document.querySelectorAll('.custom-dropdown-list.open').forEach(el => {
+				if (el.id !== id + '-list') el.classList.remove('open');
+			});
+			list.classList.toggle('open');
+		}
+
+		function openUrl(url, dropdownId) {
+			window.open(url, '_blank');
+			// Close dropdown and reset label
+			document.getElementById(dropdownId + '-list').classList.remove('open');
+		}
+
+		// Close dropdowns when clicking outside
+		document.addEventListener('click', function(e) {
+			if (!e.target.closest('.custom-dropdown')) {
+				document.querySelectorAll('.custom-dropdown-list.open').forEach(el => {
+					el.classList.remove('open');
+				});
+			}
+		});
     </script>
 	
 <!-- Add this before </body> tag -->
@@ -2262,41 +2353,43 @@
     <div class="mobile-sidebar-content">
         <div class="mobile-tool-section">
             <h4><i class="fas fa-map"></i> War Maps</h4>
-            <select class="mobile-tool-select" id="mobileWarMaps" dir="ltr">
-				<option value="" disabled selected style="display:none;">Select Map...</option>
-				<option value="https://www.tzevaadom.co.il/" dir="ltr">🚨 Tzofar - Tzeva Adom</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Conflict maps</option>
-				<option value="https://hezbollah.liveuamap.com/">🔴 Hezbollah Map</option>
-				<option value="https://lebanon.liveuamap.com/">🔴 Lebanon Map</option>
-				<option value="https://israelpalestine.liveuamap.com/">🔴 Israel-Palestine Map</option>
-				<option value="https://www.washingtoninstitute.org/hezbollahinteractivemap/">🔴 Lebanese Hezbollah</option>
-				<option value="https://health.liveuamap.com/en/ukraine">🔴 Ukraine</option>
-				<option value="https://isis.liveuamap.com/">🔴 ISIS Map</option>
-				<option value="https://iran.liveuamap.com/">🔴 Iran Map</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Military Deploiment</option>
-				<option value="https://experience.arcgis.com/experience/6893435f0297454a988ad2e6bf474a7b">🪖 Centcom - Middle East</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Skies</option>
-				<option value="https://www.flightradar24.com/34.00,36.33/7">✈️ Flight Radar 24</option>
-				<option value="https://www.windy.com/?38.150,30.863,4,p:wind">🌨️ Windy</option>
-				<option value="https://www.ventusky.com/#p=37.6;32.5;4">🌧️️ Ventusky</option>
-				<option value="https://www.mooncalc.org/#/51.5071,14.5886,3/2026.02.22/03:19/1/3">🌕 Moon Calculator</option>
-				<option value="https://starwalk.space/en/moon-calendar">🌕 Starwalk Moon</option>
-				<option value="https://satellitemap.space/">🛰️ StarLink</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Sea</option>
-				<option value="https://www.marinetraffic.com/en/ais/home/centerx:25.2/centery:36.7/zoom:6">🌊 Marine Traffic</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Earth</option>
-				<option value="https://eq.gsi.gov.il/heb/earthquake/lastEarthquakes.php">🟤 Earthquakes</option>
-				<option disabled style="color: #555;">──────────────────</option>
-				<option disabled style="color: #aaa; font-style: italic;">Hazards</option>
-				<option value="https://health.liveuamap.com/en/epidemics">🦠 Epidemics</option>
-				<option value="https://www.gmcmap.com/">☢️ GMC Map</option>
-				<option value="https://map.safecast.org/?y=32.19&x=44.76&z=7&l=0&m=0">☢️ SafeCast map</option>
-			</select>
+            <div class="custom-dropdown" id="warMapsDropdown">
+				<button class="custom-dropdown-selected" onclick="toggleDropdown('warMapsDropdown')">
+					<span>Select Map...</span>
+					<i class="fas fa-chevron-down"></i>
+				</button>
+				<div class="custom-dropdown-list" id="warMapsDropdown-list">
+					<div class="custom-dropdown-item disabled">Conflict maps</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.tzevaadom.co.il/', 'warMapsDropdown')">🚨 Tzofar - Tzeva Adom</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://hezbollah.liveuamap.com/', 'warMapsDropdown')">🔴 Hezbollah Map</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://lebanon.liveuamap.com/', 'warMapsDropdown')">🔴 Lebanon Map</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://israelpalestine.liveuamap.com/', 'warMapsDropdown')">🔴 Israel-Palestine Map</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.washingtoninstitute.org/hezbollahinteractivemap/', 'warMapsDropdown')">🔴 Lebanese Hezbollah</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://health.liveuamap.com/en/ukraine', 'warMapsDropdown')">🔴 Ukraine</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://isis.liveuamap.com/', 'warMapsDropdown')">🔴 ISIS Map</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://iran.liveuamap.com/', 'warMapsDropdown')">🔴 Iran Map</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">Military Deployment</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://experience.arcgis.com/experience/6893435f0297454a988ad2e6bf474a7b', 'warMapsDropdown')">🪖 Centcom - Middle East</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">Skies</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.flightradar24.com/34.00,36.33/7', 'warMapsDropdown')">✈️ Flight Radar 24</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.windy.com/?38.150,30.863,4,p:wind', 'warMapsDropdown')">🌨️ Windy</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.ventusky.com/#p=37.6;32.5;4', 'warMapsDropdown')">🌧️ Ventusky</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.mooncalc.org/#/51.5071,14.5886,3/2026.02.22/03:19/1/3', 'warMapsDropdown')">🌕 Moon Calculator</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://starwalk.space/en/moon-calendar', 'warMapsDropdown')">🌕 Starwalk Moon</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://satellitemap.space/', 'warMapsDropdown')">🛰️ StarLink</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">Sea</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.marinetraffic.com/en/ais/home/centerx:25.2/centery:36.7/zoom:6', 'warMapsDropdown')">🌊 Marine Traffic</div>
+					<div class="custom-dropdown-item separator"></div>
+					<div class="custom-dropdown-item disabled">Hazards</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://eq.gsi.gov.il/heb/earthquake/lastEarthquakes.php', 'warMapsDropdown')">🟤 Earthquakes</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://health.liveuamap.com/en/epidemics', 'warMapsDropdown')">🦠 Epidemics</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://www.gmcmap.com/', 'warMapsDropdown')">☢️ GMC Map</div>
+					<div class="custom-dropdown-item" onclick="openUrl('https://map.safecast.org/?y=32.19&x=44.76&z=7&l=0&m=0', 'warMapsDropdown')">☢️ SafeCast map</div>
+				</div>
+			</div>
         </div>
         <div class="mobile-tool-section">
             <h4><i class="fas fa-newspaper"></i> News Sites</h4>
