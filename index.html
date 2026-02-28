@@ -462,20 +462,21 @@
 		/* Mobile Sidebar */
 		.mobile-sidebar {
 			position: fixed;
-			left: -350px;
+			left: 0px;
 			top: 0;
 			width: 320px;
 			height: 100vh;
 			background: rgba(26, 26, 46, 0.98);
 			backdrop-filter: blur(10px);
 			z-index: 2000;
+			transform: translateX(-120%);
 			transition: right 0.3s ease;
 			overflow-y: auto;
 			box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
 		}
 
 		.mobile-sidebar.active {
-			left: 0;
+			transform: translateX(0);
 		}
 
 		.mobile-menu-overlay {
@@ -786,8 +787,11 @@
 			.mobile-sidebar {
 				width: 50%;
 				max-width: 400px;
+				transform: translateX(-120%);
 			}
-
+			.mobile-sidebar.active {
+				transform: translateX(0);
+			}
 			/* Custom layout overlay */
 			.custom-layout-controls {
 				max-height: 90vh;
@@ -850,8 +854,8 @@
 		.custom-dropdown-selected {
 			width: 100%;
 			padding: 0.75rem;
-			background: #1a1a2e;
-			border: 1px solid rgba(255,255,255,0.2);
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
 			border-radius: 6px;
 			color: white;
 			font-size: 1rem;
@@ -869,8 +873,8 @@
 			top: 100%;
 			left: 0;
 			right: 0;
-			background: #1a1a2e;
-			border: 1px solid rgba(255,255,255,0.2);
+			background: rgba(26, 26, 46, 0.98);
+			border: 1px solid rgba(255, 255, 255, 0.2);
 			border-radius: 6px;
 			z-index: 9999;
 			max-height: 300px;
@@ -1551,7 +1555,10 @@
 			initializeFilters();
 			initializeGridSelector();
 			initializeBandwidthMonitoring();
-			autoLoadAllVideos();
+			const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+			if (!isIOS) {
+				autoLoadAllVideos();
+			}
 			updateStats();
 			setTimeout(adjustStatBarPosition, 50);
 			
@@ -1578,11 +1585,10 @@
 			});
 
 			// Mobile search
-			document.getElementById('mobileSearchBox').addEventListener('keypress', function(event) {
-				if (event.key === 'Enter' && this.value.trim()) {
-					window.open(`https://www.google.com/maps/search/${encodeURIComponent(this.value.trim())}`, '_blank');
-					this.value = '';
-					closeMobileMenu();
+			document.getElementById('mobileSearchBox').addEventListener('keydown', function(event) {
+				if (event.key === 'Enter') {
+					event.preventDefault();
+					doLocationSearch();
 				}
 			});
 		});
@@ -2343,14 +2349,26 @@
 			}
 		});
     </script>
-	
+	<script>
+	function doLocationSearch() {
+		const input = document.getElementById('mobileSearchBox');
+		const query = input.value.trim();
+		if (query) {
+			window.open('https://www.google.com/maps/search/' + encodeURIComponent(query), '_blank');
+			input.value = '';
+			closeMobileMenu();
+		}
+	}
+	</script>
+
+
 <!-- Add this before </body> tag -->
 <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 <div class="mobile-sidebar" id="mobileSidebar" dir="ltr">
     <div class="mobile-sidebar-header">
-        <h3>Menu</h3>
-        <button class="close-sidebar" onclick="closeMobileMenu()" style="font-size: 2rem;">&times;</button>
-    </div>
+		<h3><i class="fas fa-bars"></i></h3>
+		<button class="close-sidebar" onclick="closeMobileMenu()" style="font-size: 2rem;">&times;</button>
+	</div>
     <div class="mobile-sidebar-content">
         <div class="mobile-tool-section">
             <h4><i class="fas fa-map"></i> War Maps</h4>
@@ -2424,6 +2442,10 @@
 					<div class="custom-dropdown-item separator"></div>
 					<div class="custom-dropdown-item disabled">🇶🇦 Qatar</div>
 					<div class="custom-dropdown-item" onclick="openUrl('https://www.aljazeera.com/', 'newsSitesDropdown')">Al-Jazeera</div>
+					<div class="custom-dropdown-item" style="display:flex; justify-content:space-between; align-items:center;">
+						<span onclick="openUrl('https://www.aljazeera.com/', 'newsSitesDropdown')" style="flex:1; cursor:pointer;">Al-Jazeera</span>
+						<span onclick="event.stopPropagation(); openUrl('https://translate.google.com/translate?u=https://www.aljazeera.com/', 'newsSitesDropdown')" style="font-size:1rem; padding-left:0.5rem; cursor:pointer;" title="Translate">🌐</span>
+					</div>
 					<div class="custom-dropdown-item separator"></div>
 					<div class="custom-dropdown-item disabled">🇸🇦 Saudi Arabia</div>
 					<div class="custom-dropdown-item" onclick="openUrl('https://english.almayadeen.net/', 'newsSitesDropdown')">Al-Mayadeen</div>
@@ -2441,14 +2463,26 @@
 					<div class="custom-dropdown-item separator"></div>
 					<div class="custom-dropdown-item disabled">📈 Other</div>
 					<div class="custom-dropdown-item" onclick="openUrl('https://polymarket.com/', 'newsSitesDropdown')">PolyMarket</div>
+					<div class="custom-dropdown-item" style="display:flex; justify-content:space-between; align-items:center;">
+						<span onclick="openUrl('https://polymarket.com/', 'newsSitesDropdown')" style="flex:1; cursor:pointer;">polymarket</span>
+						<span onclick="event.stopPropagation(); openUrl('https://translate.google.com/translate?u=https://polymarket.com/&hl=iw&sl=auto&tl=iw
+
+', 'newsSitesDropdown')" style="font-size:1rem; padding-left:0.5rem; cursor:pointer;" title="Translate">🌐</span>
+					</div>
 					<div class="custom-dropdown-item" onclick="openUrl('https://usstrikeradar.com/', 'newsSitesDropdown')">Strike Radar</div>
 				</div>
 			</div>
         </div>
         <div class="mobile-tool-section">
             <h4><i class="fas fa-search"></i> Search Location</h4>
-            <input type="text" class="mobile-search-input" id="mobileSearchBox" placeholder="Search location...">
-        </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+				<input type="text" class="mobile-search-input" id="mobileSearchBox" placeholder="Search location..." style="flex:1;"
+					onkeydown="if(event.key==='Enter'){event.preventDefault();var q=this.value.trim();if(q){window.open('https://www.google.com/maps/search/'+encodeURIComponent(q),'_blank');this.value='';closeMobileMenu();}}">
+				<button onclick="var q=document.getElementById('mobileSearchBox').value.trim();if(q){window.open('https://www.google.com/maps/search/'+encodeURIComponent(q),'_blank');document.getElementById('mobileSearchBox').value='';closeMobileMenu();}" style="padding:0.75rem;background:rgba(79,70,229,0.8);border:none;border-radius:6px;color:white;font-size:1rem;cursor:pointer;flex-shrink:0;">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</div>
     </div>
 </div>
 	
