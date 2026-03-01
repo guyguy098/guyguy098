@@ -4,7 +4,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global News Center</title>
+    <title>Hamal Tatzpit</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
@@ -470,7 +470,7 @@
 			backdrop-filter: blur(10px);
 			z-index: 2000;
 			transform: translateX(-120%);
-			transition: right 0.3s ease;
+			transition: transform 0.3s ease;
 			overflow-y: auto;
 			box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
 		}
@@ -501,12 +501,6 @@
 			justify-content: space-between;
 			align-items: center;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-		}
-
-		.mobile-sidebar-header h3 {
-			color: #4f46e5;
-			font-size: 1.2rem;
-			margin: 0;
 		}
 
 		.close-sidebar {
@@ -734,6 +728,64 @@
 			}
 		}
 		
+		.channel-picker {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 0.75rem;
+			margin-bottom: 1.5rem;
+		}
+		.channel-option {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.6rem 0.75rem;
+			background: rgba(255,255,255,0.05);
+			border: 1px solid rgba(255,255,255,0.1);
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 0.82rem;
+			color: rgba(255,255,255,0.7);
+			transition: all 0.2s;
+			user-select: none;
+		}
+		.channel-option:hover {
+			background: rgba(255,255,255,0.1);
+			border-color: rgba(255,255,255,0.2);
+		}
+		.channel-option.selected {
+			background: rgba(79,70,229,0.2);
+			border-color: rgba(79,70,229,0.6);
+			color: white;
+		}
+		.channel-option input[type="checkbox"] {
+			display: none;
+		}
+		.custom-controls {
+			display: flex;
+			gap: 0.75rem;
+			padding-top: 1rem;
+			border-top: 1px solid rgba(255,255,255,0.1);
+			flex-wrap: wrap;
+		}
+		.custom-btn {
+			padding: 0.6rem 1.2rem;
+			background: rgba(79,70,229,0.7);
+			border: none;
+			border-radius: 8px;
+			color: white;
+			font-size: 0.9rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+		.custom-btn:hover {
+			background: rgba(79,70,229,1);
+		}
+		.custom-btn:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
+
 		/* ── Phone Landscape ── */
 		@media (max-width: 900px) and (orientation: landscape) {
 
@@ -915,6 +967,300 @@
 			margin: 2px 0;
 		}
 
+		/* ── AI Sum Button ── */
+		.ai-sum-btn {
+			width: 100%;
+			padding: 0.85rem 1rem;
+			background: linear-gradient(135deg, rgba(79,70,229,0.8), rgba(139,92,246,0.8));
+			border: 1px solid rgba(139,92,246,0.5);
+			border-radius: 10px;
+			color: white;
+			font-size: 1rem;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.6rem;
+			transition: all 0.3s ease;
+		}
+		.ai-sum-btn:hover {
+			background: linear-gradient(135deg, rgba(79,70,229,1), rgba(139,92,246,1));
+			transform: translateY(-1px);
+			box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+		}
+
+		/* ── AI Sum Overlay ── */
+		.ai-sum-overlay {
+			display: none;
+			position: fixed;
+			top: 0; left: 0;
+			width: 100%; height: 100%;
+			background: rgba(0,0,0,0.85);
+			z-index: 3000;
+			overflow-y: auto;
+		}
+		.ai-sum-overlay.active { display: block; }
+
+		.ai-sum-panel {
+			background: linear-gradient(160deg, #0d0d1a 0%, #111827 100%);
+			min-height: 100vh;
+			max-width: 900px;
+			margin: 0 auto;
+			padding: 0 0 3rem 0;
+		}
+
+		.ai-sum-header {
+			position: sticky;
+			top: 0;
+			background: rgba(10,10,25,0.97);
+			backdrop-filter: blur(12px);
+			border-bottom: 1px solid rgba(139,92,246,0.3);
+			padding: 1rem 1.5rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			z-index: 10;
+		}
+		.ai-sum-title {
+			font-size: 1.2rem;
+			font-weight: 700;
+			color: white;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		.ai-sum-title .gradient-text {
+			background: linear-gradient(135deg, #818cf8, #a78bfa);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+		.ai-sum-close {
+			background: rgba(255,255,255,0.1);
+			border: none;
+			color: white;
+			font-size: 1.4rem;
+			cursor: pointer;
+			width: 36px; height: 36px;
+			border-radius: 50%;
+			display: flex; align-items: center; justify-content: center;
+			transition: all 0.2s;
+		}
+		.ai-sum-close:hover { background: rgba(255,255,255,0.2); }
+
+		.ai-sum-controls {
+			padding: 0.75rem 1.5rem;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			flex-wrap: wrap;
+			border-bottom: 1px solid rgba(255,255,255,0.06);
+		}
+		.ai-sum-fetch-btn {
+			padding: 0.5rem 1.2rem;
+			background: rgba(79,70,229,0.8);
+			border: none;
+			border-radius: 8px;
+			color: white;
+			font-size: 0.85rem;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex; align-items: center; gap: 0.5rem;
+			transition: all 0.2s;
+		}
+		.ai-sum-fetch-btn:hover { background: rgba(79,70,229,1); }
+		.ai-sum-fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+		.gemini-key-input {
+			padding: 0.5rem 0.75rem;
+			background: rgba(255,255,255,0.07);
+			border: 1px solid rgba(255,255,255,0.15);
+			border-radius: 8px;
+			color: white;
+			font-size: 0.82rem;
+			width: 240px;
+			outline: none;
+		}
+		.gemini-key-input:focus { border-color: rgba(139,92,246,0.6); }
+		.gemini-key-input::placeholder { color: rgba(255,255,255,0.35); }
+
+		.gemini-enhance-btn {
+			padding: 0.5rem 1rem;
+			background: rgba(16,185,129,0.2);
+			border: 1px solid rgba(16,185,129,0.4);
+			border-radius: 8px;
+			color: #6ee7b7;
+			font-size: 0.82rem;
+			cursor: pointer;
+			display: flex; align-items: center; gap: 0.4rem;
+			transition: all 0.2s;
+			white-space: nowrap;
+		}
+		.gemini-enhance-btn:hover { background: rgba(16,185,129,0.35); }
+		.gemini-enhance-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+		.ai-sum-status {
+			font-size: 0.78rem;
+			color: rgba(255,255,255,0.45);
+			margin-left: auto;
+		}
+
+		.ai-sum-loading {
+			display: none;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 4rem 2rem;
+			gap: 1rem;
+			color: rgba(255,255,255,0.6);
+			font-size: 0.9rem;
+		}
+		.ai-sum-loading.active { display: flex; }
+		.ai-sum-spinner {
+			width: 44px; height: 44px;
+			border: 3px solid rgba(139,92,246,0.2);
+			border-top: 3px solid #a78bfa;
+			border-radius: 50%;
+			animation: spin 0.9s linear infinite;
+		}
+		.ai-sum-progress {
+			font-size: 0.78rem;
+			color: rgba(139,92,246,0.8);
+		}
+
+		.ai-sum-list {
+			padding: 1rem 1.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.story-card {
+			background: rgba(255,255,255,0.04);
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 12px;
+			padding: 1rem 1.2rem;
+			transition: all 0.2s;
+		}
+		.story-card:hover {
+			background: rgba(255,255,255,0.07);
+			border-color: rgba(139,92,246,0.3);
+		}
+		.story-top {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.75rem;
+			margin-bottom: 0.6rem;
+		}
+		.story-rank {
+			font-size: 0.72rem;
+			color: rgba(255,255,255,0.3);
+			min-width: 22px;
+			padding-top: 2px;
+		}
+		.story-badge {
+			padding: 0.2rem 0.6rem;
+			border-radius: 20px;
+			font-size: 0.7rem;
+			font-weight: 700;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+		.badge-hot    { background: rgba(34,197,94,0.2);   color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+		.badge-warm   { background: rgba(245,158,11,0.2);  color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+		.badge-normal { background: rgba(239,68,68,0.2);   color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+		.story-headline {
+			font-size: 0.92rem;
+			font-weight: 600;
+			color: rgba(255,255,255,0.92);
+			line-height: 1.4;
+			flex: 1;
+		}
+		.story-sources {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem;
+			padding-left: 2rem;
+		}
+		.source-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			padding: 0.2rem 0.6rem;
+			background: rgba(255,255,255,0.06);
+			border: 1px solid rgba(255,255,255,0.1);
+			border-radius: 6px;
+			color: rgba(255,255,255,0.65);
+			font-size: 0.72rem;
+			text-decoration: none;
+			transition: all 0.15s;
+		}
+		.source-link:hover {
+			background: rgba(139,92,246,0.2);
+			border-color: rgba(139,92,246,0.4);
+			color: #c4b5fd;
+		}
+
+		.ai-sum-summary-bar {
+			display: none;
+			padding: 0.6rem 1.5rem;
+			background: rgba(139,92,246,0.1);
+			border-bottom: 1px solid rgba(139,92,246,0.2);
+			font-size: 0.78rem;
+			color: rgba(255,255,255,0.5);
+			gap: 1.5rem;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+		.ai-sum-summary-bar.active { display: flex; }
+		.ai-sum-summary-bar strong { color: rgba(139,92,246,0.9); }
+
+		.gemini-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.3rem;
+			padding: 0.15rem 0.5rem;
+			background: rgba(16,185,129,0.15);
+			border: 1px solid rgba(16,185,129,0.3);
+			border-radius: 4px;
+			font-size: 0.68rem;
+			color: #6ee7b7;
+		}
+
+		.ai-sum-empty {
+			display: none;
+			text-align: center;
+			padding: 4rem 2rem;
+			color: rgba(255,255,255,0.35);
+			font-size: 0.9rem;
+			flex-direction: column;
+			gap: 0.5rem;
+			align-items: center;
+			justify-content: center;
+		}
+		.ai-sum-empty.active { display: flex; }
+
+		@media (max-width: 768px) {
+			.ai-sum-controls { gap: 0.5rem; }
+			.gemini-key-input { width: 100%; }
+			.ai-sum-status { margin-left: 0; width: 100%; }
+			.ai-sum-list { padding: 0.75rem; }
+			.story-sources { padding-left: 0; }
+		}
+
+		.story-headline-he {
+			font-size: 0.92rem;
+			color: rgba(255,255,255,0.55);
+			line-height: 1.4;
+			margin-top: 0.2rem;
+		    margin-bottom: 0.6rem;
+			padding-left: 2rem;
+			direction: rtl;
+			text-align: right;
+			font-style: italic;
+		}
+
+
     </style>
 </head>
 <body>
@@ -924,7 +1270,7 @@
 				<button class="hamburger-btn-main" onclick="openMobileMenu()">
 					<i class="fas fa-bars"></i>
 				</button>
-				<a href="#" class="logo">Global News Center</a>
+				<a href="#" class="logo">Hamal Tatzpit</a>
 			</div>
             
             <div class="controls">
@@ -1238,18 +1584,6 @@
                 </div>
                 <video class="video-element" id="video20" muted preload="none" controls></video>
                 <div class="play-overlay" onclick="playVideo('video20', 'https://turnerlive.warnermediacdn.com/hls/live/586495/cnngo/cnn_slate/VIDEO_4_1064000.m3u8')">
-                    <i class="fas fa-play"></i>
-                </div>
-                <div class="loading-indicator"><div class="spinner"></div></div>
-            </div>
-
-			<div class="video-container" data-region="usa">
-                <div class="video-header">
-                    <div class="video-title">CNN International</div>
-                    <div class="country-badge badge-usa">USA</div>
-                </div>
-                <video class="video-element" id="video2" muted preload="none" controls></video>
-                <div class="play-overlay" onclick="playVideo('video2', 'https://turnerlive.warnermediacdn.com/hls/live/586497/cnngo/cnni/VIDEO_0_3564000.m3u8')">
                     <i class="fas fa-play"></i>
                 </div>
                 <div class="loading-indicator"><div class="spinner"></div></div>
@@ -1659,6 +1993,7 @@
 
 		// Load video just to get first frame, then pause
 		function loadVideoForPreview(videoId, streamUrl, onComplete) {
+			let completed = false;
 			const video = document.getElementById(videoId);
 			const videoContainer = video.closest('.video-container');
 			
@@ -1712,12 +2047,14 @@
 							}
 							
 							// Remove from active streams
+							completed = true;
 							activeStreams.delete(videoId + '_preview');
 							updateStats();
 							if (onComplete) onComplete();
 							
 						}, 1000); // Wait 1 second for stable frame
 					}).catch(() => {
+						completed = true;
 						// Set red X image as poster
 						const unavailableImage = generateUnavailableImage();
 						video.poster = unavailableImage;
@@ -1742,6 +2079,8 @@
 				}, { once: true });
 				
 				hls.on(Hls.Events.ERROR, function(event, data) {
+					if (completed) return;
+					completed = true;
 					console.log('Preview load failed for', videoId);
 					
 					// Set red X image as poster
@@ -1830,7 +2169,7 @@
 
         // Initialize region filters
         function initializeFilters() {
-            const regionFilters = document.querySelectorAll('.region-filter');
+            const regionFilters = document.querySelectorAll('.region-filter:not(#allFilter)');
             
             regionFilters.forEach(filter => {
                 filter.addEventListener('click', function() {
@@ -1940,15 +2279,6 @@
 				loadingIndicator.style.display = 'none';
 				showErrorMessage(videoContainer, 'Bandwidth limit reached (6 streams / 15 Mbps). Stop a stream first.');
 				return;
-			}
-
-			// Check if preview is loaded, destroy it and load properly
-			if (loadedStreams.has(videoId + '_preview')) {
-				const previewHls = loadedStreams.get(videoId + '_preview');
-				if (previewHls && previewHls.destroy) {
-					previewHls.destroy();
-				}
-				loadedStreams.delete(videoId + '_preview');
 			}
 
 			// Load stream
@@ -2132,7 +2462,7 @@
         // Update statistics
         function updateStats() {
             const visibleContainers = document.querySelectorAll('.video-container:not(.hidden)');
-            const activeStreamCount = activeStreams.size;
+            const activeStreamCount = Array.from(activeStreams).filter(id => !id.endsWith('_preview')).length;
             const visibleChannelCount = visibleContainers.length;
             
             document.getElementById('activeStreams').textContent = activeStreamCount;
@@ -2301,11 +2631,9 @@
 
         // Stop all active videos
         function stopAllVideos() {
-            const activeVideoIds = Array.from(activeStreams);
-            activeVideoIds.forEach(videoId => {
-                stopVideo(videoId);
-            });
-        }
+			const activeVideoIds = Array.from(activeStreams).filter(id => !id.endsWith('_preview'));
+			activeVideoIds.forEach(videoId => stopVideo(videoId));
+		}
 
         // Toggle fullscreen for video
         function toggleFullscreen(video) {
@@ -2373,25 +2701,14 @@
 			}
 		});
     </script>
-	<script>
-	function doLocationSearch() {
-		const input = document.getElementById('mobileSearchBox');
-		const query = input.value.trim();
-		if (query) {
-			window.open('https://www.google.com/maps/search/' + encodeURIComponent(query), '_blank');
-			input.value = '';
-			closeMobileMenu();
-		}
-	}
-	</script>
-
 
 <!-- Add this before </body> tag -->
 <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 <div class="mobile-sidebar" id="mobileSidebar" dir="ltr">
     <div class="mobile-sidebar-header">
-		<h3><i class="fas fa-bars"></i></h3>
-		<button class="close-sidebar" onclick="closeMobileMenu()" style="font-size: 2rem;">&times;</button>
+		<button class="hamburger-btn-main" onclick="closeMobileMenu()">
+			<i class="fas fa-bars"></i>
+		</button>
 	</div>
     <div class="mobile-sidebar-content">
         <div class="mobile-tool-section">
@@ -2633,6 +2950,12 @@
 					</div>				</div>
 			</div>
         </div>
+		<div class="mobile-tool-section" style="margin-top: -1.5rem;">
+			<button class="ai-sum-btn" onclick="openAiSum(); closeMobileMenu();">
+				<i class="fas fa-robot"></i> AI Summary
+			</button>
+		</div>
+
         <div class="mobile-tool-section">
             <h4><i class="fas fa-search"></i> Search Location</h4>
             <div style="display:flex;gap:0.5rem;align-items:center;">
@@ -2646,5 +2969,637 @@
     </div>
 </div>
 	
+	<div class="ai-sum-overlay" id="aiSumOverlay">
+		<div class="ai-sum-panel">
+
+			<div class="ai-sum-header">
+				<div class="ai-sum-title">
+					<i class="fas fa-robot"></i>
+					<span class="gradient-text">AI Summary</span>
+					<span style="color:rgba(255,255,255,0.3); font-size:0.8rem; font-weight:400;">Top stories across all sources</span>
+				</div>
+				<button class="ai-sum-close" onclick="closeAiSum()">×</button>
+			</div>
+
+			<div class="ai-sum-controls">
+				<button class="ai-sum-fetch-btn" id="aiSumFetchBtn" onclick="fetchAiSum()">
+					<i class="fas fa-sync-alt"></i> Fetch News
+				</button>
+				<input type="password" class="gemini-key-input" id="geminiApiKey"
+					placeholder="Gemini API key (optional — improves grouping)">
+				<button class="gemini-enhance-btn" id="geminiEnhanceBtn" onclick="enhanceWithGemini()" disabled>
+					<i class="fas fa-magic"></i> Enhance
+				</button>
+				<span class="ai-sum-status" id="aiSumStatus">Ready</span>
+			</div>
+
+			<div class="ai-sum-summary-bar" id="aiSumSummaryBar">
+				<span><strong id="statStories">0</strong> stories</span>
+				<span><strong id="statSources">0</strong> sources</span>
+				<span><strong id="statArticles">0</strong> articles fetched</span>
+				<span id="statGeminiBadge"></span>
+				<span id="statTime" style="margin-left:auto; color:rgba(255,255,255,0.3);"></span>
+			</div>
+
+			<div class="ai-sum-loading" id="aiSumLoading">
+				<div class="ai-sum-spinner"></div>
+				<div>Fetching from sources...</div>
+				<div class="ai-sum-progress" id="aiSumProgress">Connecting to GDELT...</div>
+			</div>
+
+			<div class="ai-sum-empty" id="aiSumEmpty">
+				<i class="fas fa-newspaper" style="font-size:2rem; opacity:0.3;"></i>
+				<span>Click "Fetch News" to load top stories</span>
+			</div>
+
+			<div class="ai-sum-list" id="aiSumList"></div>
+
+		</div>
+	</div>
+
+
+	<script>
+		const CORS_PROXY  = 'https://api.allorigins.win/raw?url=';
+		const CORS_PROXY2 = 'https://corsproxy.io/?url=';
+
+		const GDELT_URL = 'https://api.gdeltproject.org/api/v2/doc/doc?' +
+			'query=israel%20OR%20iran%20OR%20gaza%20OR%20hezbollah%20OR%20lebanon%20OR%20hamas' +
+			'&mode=artlist&maxrecords=75&format=json&timespan=24h&sort=hybridrel';
+
+		const RSS_FEEDS = [
+			{ name: 'Times of Israel', url: 'https://www.timesofisrael.com/feed/',             flag: '🇮🇱' },
+			{ name: 'Jerusalem Post',  url: 'https://www.jpost.com/rss/rssfeedsfrontpage.aspx', flag: '🇮🇱' },
+			{ name: 'i24 News',        url: 'https://www.i24news.tv/en/rss',                    flag: '🇮🇱' },
+			{ name: 'Haaretz',         url: 'https://www.haaretz.com/cmlink/1.628765',          flag: '🇮🇱' },
+			{ name: 'Al Jazeera',      url: 'https://www.aljazeera.com/xml/rss/all.xml',        flag: '🇶🇦' },
+			{ name: 'BBC World',       url: 'https://feeds.bbci.co.uk/news/world/rss.xml',      flag: '🇬🇧' },
+			{ name: 'Reuters',         url: 'https://feeds.reuters.com/reuters/topNews',        flag: '🌍' },
+			{ name: 'CNN',             url: 'http://rss.cnn.com/rss/edition_world.rss',         flag: '🇺🇸' },
+			{ name: 'Fox News',        url: 'https://moxie.foxnews.com/google-publisher/world.xml', flag: '🇺🇸' },
+			{ name: 'France 24',       url: 'https://www.france24.com/en/rss',                  flag: '🇫🇷' },
+			{ name: 'DW News',         url: 'https://rss.dw.com/rdf/rss-en-all',               flag: '🇩🇪' },
+			{ name: 'Euronews',        url: 'https://feeds.feedburner.com/euronews/en/news/',   flag: '🇪🇺' },
+			{ name: 'Press TV',        url: 'https://www.presstv.ir/rss',                       flag: '🇮🇷' },
+			{ name: 'Al Arabiya',      url: 'https://www.alarabiya.net/tools/rss',              flag: '🇸🇦' },
+		];
+
+		const SOURCE_FLAGS = {
+			'Times of Israel': 'il',
+			'Jerusalem Post':  'il',
+			'i24 News':        'il',
+			'Haaretz':         'il',
+			'Al Jazeera':      'qa',
+			'BBC World':       'gb',
+			'Reuters':         'gb',
+			'CNN':             'us',
+			'Fox News':        'us',
+			'France 24':       'fr',
+			'DW News':         'de',
+			'Euronews':        'eu',
+			'Press TV':        'ir',
+			'Al Arabiya':      'sa',
+		};
+
+		function getSourceFlag(sourceName) {
+			const code = SOURCE_FLAGS[sourceName];
+			if (code) return `<img src="https://flagcdn.com/16x12/${code}.png" style="width:16px;height:12px;border-radius:2px;vertical-align:middle;">`;
+			return '🌐';
+		}
+
+		const STOPWORDS = new Set([
+			'the','a','an','and','or','but','in','on','at','to','for','of','with','by',
+			'from','is','are','was','were','be','been','has','have','had','will','would',
+			'can','could','should','may','might','that','this','these','those','it','its',
+			'as','up','about','after','before','over','under','into','out','not','no',
+			'new','says','say','said','report','reports','amid','more','than','also',
+			'what','when','how','who','which','their','they',
+			'في','من','إلى','على','عن','مع','هذا','هذه','ذلك','التي','الذي','لا','ما','إن','أن','كان','كانت','قال','قالت',
+			'של','את','על','עם','הוא','היא','הם','זה','זאת','כי','אבל','גם','לא','יש',
+		]);
+
+		// Ordered by priority — first match wins
+		const TOPIC_CATEGORIES = [
+			{
+				name: '⚔️ Military & Combat',
+				keywords: [
+					'attack','strike','airstrike','missile','rocket','drone','bomb','explosion',
+					'troops','forces','military','army','navy','air force','idf','brigade',
+					'war','battle','combat','offensive','operation','invasion','siege','frontline',
+					'soldier','commander','general','admiral','fighter','jet','tank','artillery',
+					'killed','wounded','casualties','fatalities','dead','destroyed',
+					'hamas','hezbollah','jihad','qassam','izz ad-din',
+					'captured','prisoner','raid','ambush','ceasefire','truce','hostage',
+					'iron dome','air defense','interception','intercepted',
+					'gunfire','shooting','sniper','mortar','rpg','explosive'
+				]
+			},
+			{
+				name: '🚨 Alerts & Incidents',
+				keywords: [
+					'alert','alarm','siren','red alert','code red','evacuation','shelter',
+					'tzeva','tzofar','oref','pikud','warning','imminent',
+					'emergency','incident','crisis','escalation','threat level'
+				]
+			},
+			{
+				name: '📡 Intelligence & Security',
+				keywords: [
+					'intelligence','mossad','cia','shin bet','shabak','mi6','spy','espionage',
+					'classified','covert','operation','infiltration','surveillance',
+					'cyber','hacking','hack','breach','leak','terror plot','cell','network',
+					'arrest','detained','suspected','assassination','targeted'
+				]
+			},
+			{
+				name: '🤝 Diplomacy & Talks',
+				keywords: [
+					'ceasefire deal','peace deal','agreement','negotiations','talks','summit',
+					'diplomat','diplomacy','mediation','mediator','proposal','framework',
+					'hostage deal','prisoner exchange','release','blinken','sullivan',
+					'secretary of state','foreign minister','envoy','delegation','visit',
+					'united nations','un resolution','security council','veto',
+					'normalization','abraham accords','two-state'
+				]
+			},
+			{
+				name: '⚖️ Politics & Law',
+				keywords: [
+					'election','vote','parliament','knesset','congress','senate',
+					'court','law','legal','verdict','ruling','appeal','indictment',
+					'corruption','coalition','opposition','party','cabinet','minister',
+					'prime minister','president','government','policy','legislation',
+					'protest','demonstration','rally','riot','revolution','coup',
+					'netanyahu','biden','trump','harris','gantz','lapid','sinwar'
+				]
+			},
+			{
+				name: '💰 Economy & Finance',
+				keywords: [
+					'economy','financial','stock','market','shares','trading',
+					'dollar','shekel','euro','currency','exchange rate',
+					'inflation','gdp','budget','deficit','debt','surplus',
+					'bank','interest rate','fed','central bank',
+					'trade','sanction','embargo','export','import',
+					'oil','gas','energy','commodity','wheat','grain',
+					'investment','fund','billion','million','recession','growth',
+					'nasdaq','dow jones','s&p','tel aviv stock exchange','tase'
+				]
+			},
+			{
+				name: '➕ Humanitarian',
+				keywords: [
+					'humanitarian','aid','relief','civilian','refugee','displaced',
+					'hospital','medical','doctor','nurse','wounded','injured',
+					'food','water','supply','shortage','famine','starvation',
+					'children','women','orphan','shelter','camp','unrwa',
+					'red cross','red crescent','unicef','who','msf','doctors without borders',
+					'evacuation','corridor','safe passage','blockade aid'
+				]
+			},
+			{
+				name: '🌍 International',
+				keywords: [
+					'usa','united states','russia','china','europe','turkey',
+					'egypt','jordan','saudi arabia','qatar','kuwait','uae',
+					'france','germany','uk','britain','nato','g7','g20',
+					'relations','bilateral','foreign policy','alliance','partnership'
+				]
+			},
+			{
+				name: '📰 General News',
+				keywords: [] // catch-all, always matches last
+			}
+		];
+
+		const SPONSORED_SIGNALS = [
+			'sponsored','advertisement','advertorial','promoted','paid post',
+			'paid content','partner content','brand studio','paid partnership',
+			'presented by','brought to you by','in association with',
+			'native ad','special advertising','commercial feature',
+			'[ad]','[sponsored]','[promoted]'
+		];
+
+		function isSponsored(article) {
+			const text = (article.title + ' ' + (article.url || '')).toLowerCase();
+			return SPONSORED_SIGNALS.some(s => text.includes(s));
+		}
+
+		function categorizeStory(headline, articles) {
+			const text = (headline + ' ' + articles.map(a => a.title).join(' ')).toLowerCase();
+			for (const cat of TOPIC_CATEGORIES) {
+				if (cat.keywords.length === 0) return cat.name; // catch-all
+				if (cat.keywords.some(k => text.includes(k))) return cat.name;
+			}
+			return '📰 General News';
+		}
+
+		let allArticles = [];
+		let groupedStories = [];
+
+		function openAiSum() {
+			document.getElementById('aiSumOverlay').classList.add('active');
+			document.body.style.overflow = 'hidden';
+			if (allArticles.length === 0) setTimeout(fetchAiSum, 200);
+		}
+
+		function closeAiSum() {
+			document.getElementById('aiSumOverlay').classList.remove('active');
+			document.body.style.overflow = 'auto';
+		}
+
+		async function fetchAiSum() {
+			const btn      = document.getElementById('aiSumFetchBtn');
+			const loading  = document.getElementById('aiSumLoading');
+			const list     = document.getElementById('aiSumList');
+			const empty    = document.getElementById('aiSumEmpty');
+			const bar      = document.getElementById('aiSumSummaryBar');
+
+			btn.disabled = true;
+			loading.classList.add('active');
+			list.innerHTML = '';
+			empty.classList.remove('active');
+			bar.classList.remove('active');
+			allArticles = [];
+			setStatus('Fetching...');
+			setProgress('Connecting to GDELT...');
+
+			try {
+				const gdelt = await fetchGDELT();
+				allArticles.push(...gdelt);
+				setProgress(`GDELT: ${gdelt.length} articles. Fetching RSS...`);
+			} catch(e) {
+				setProgress('GDELT failed, continuing with RSS...');
+			}
+
+			const rssResults = await Promise.allSettled(RSS_FEEDS.map(f => fetchRSS(f)));
+			rssResults.forEach(r => { if (r.status === 'fulfilled') allArticles.push(...r.value); });
+
+			// Deduplicate by URL
+			const seen = new Set();
+			allArticles = allArticles.filter(a => {
+				if (!a.url || seen.has(a.url)) return false;
+				seen.add(a.url); return true;
+			});
+
+			// Remove sponsored content
+			allArticles = allArticles.filter(a => !isSponsored(a));
+
+			setProgress(`${allArticles.length} articles. Grouping...`);
+			groupedStories = groupArticles(allArticles);
+
+			loading.classList.remove('active');
+			btn.disabled = false;
+
+			if (groupedStories.length === 0) {
+				empty.classList.add('active');
+				setStatus('No stories found');
+				return;
+			}
+
+			renderStories(groupedStories.slice(0, 50));
+
+			document.getElementById('statStories').textContent  = Math.min(groupedStories.length, 50);
+			document.getElementById('statSources').textContent  = new Set(allArticles.map(a => a.sourceName)).size;
+			document.getElementById('statArticles').textContent = allArticles.length;
+			document.getElementById('statGeminiBadge').innerHTML = '';
+			document.getElementById('statTime').textContent = new Date().toLocaleTimeString();
+			bar.classList.add('active');
+
+			const key = document.getElementById('geminiApiKey').value.trim();
+			document.getElementById('geminiEnhanceBtn').disabled = key.length < 10;
+			setStatus(`${Math.min(groupedStories.length, 50)} stories from ${allArticles.length} articles`);
+		}
+
+		async function fetchGDELT() {
+			const res = await fetchWithProxy(GDELT_URL);
+			const data = await res.json();
+			if (!data.articles) return [];
+			return data.articles.map(a => ({
+				title: decodeEntities(a.title || ''),
+				url: a.url,
+				sourceName: a.domain || extractDomain(a.url),
+				flag: '🌐',
+			}));
+		}
+
+		async function fetchRSS(feed) {
+			let text;
+			try {
+				const r = await fetchWithTimeout(CORS_PROXY + encodeURIComponent(feed.url), 8000);
+				text = await r.text();
+			} catch(e) {
+				const r = await fetchWithTimeout(CORS_PROXY2 + encodeURIComponent(feed.url), 7000);
+				text = await r.text();
+			}
+			return parseRSS(text, feed);
+		}
+
+		function parseRSS(xmlText, feed) {
+			const articles = [];
+			try {
+				const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+				doc.querySelectorAll('item, entry').forEach(item => {
+					const title = decodeEntities((item.querySelector('title')?.textContent || '').trim());
+					const linkEl = item.querySelector('link');
+					const url = linkEl?.getAttribute('href') || linkEl?.textContent?.trim() || '';
+					if (title && url) articles.push({ title, url, sourceName: feed.name, flag: feed.flag });
+				});
+			} catch(e) {}
+			return articles;
+		}
+
+		// ── TF-IDF grouping ──
+		function tokenize(text) {
+			return text.toLowerCase()
+				.replace(/[^\w\s\u0590-\u05FF\u0600-\u06FF]/g, ' ')
+				.split(/\s+/)
+				.filter(w => w.length > 2 && !STOPWORDS.has(w));
+		}
+
+		function groupArticles(articles) {
+			if (!articles.length) return [];
+			const N = articles.length;
+			const tfs = articles.map(a => {
+				const tokens = tokenize(a.title);
+				const tf = {};
+				tokens.forEach(t => tf[t] = (tf[t]||0) + 1);
+				const len = tokens.length || 1;
+				Object.keys(tf).forEach(t => tf[t] /= len);
+				return tf;
+			});
+			const df = {};
+			tfs.forEach(tf => Object.keys(tf).forEach(t => df[t] = (df[t]||0) + 1));
+			const vecs = tfs.map(tf => {
+				const v = {};
+				Object.keys(tf).forEach(t => {
+					if (df[t] < N) v[t] = tf[t] * Math.log(N / df[t]);
+				});
+				return v;
+			});
+
+			const THRESHOLD = 0.18;
+			const assigned = new Set();
+			const groups = [];
+
+			for (let i = 0; i < articles.length; i++) {
+				if (assigned.has(i)) continue;
+				const group = [i]; assigned.add(i);
+				for (let j = i+1; j < articles.length; j++) {
+					if (assigned.has(j)) continue;
+					if (cosineSim(vecs[i], vecs[j]) >= THRESHOLD) { group.push(j); assigned.add(j); }
+				}
+				groups.push(group.map(idx => articles[idx]));
+			}
+			return groups.sort((a,b) => b.length - a.length);
+		}
+
+		function cosineSim(v1, v2) {
+			let dot=0, m1=0, m2=0;
+			new Set([...Object.keys(v1),...Object.keys(v2)]).forEach(k => {
+				dot += (v1[k]||0)*(v2[k]||0);
+				m1  += (v1[k]||0)**2;
+				m2  += (v2[k]||0)**2;
+			});
+			return (!m1||!m2) ? 0 : dot/(Math.sqrt(m1)*Math.sqrt(m2));
+		}
+
+		// ── Gemini ──
+		async function enhanceWithGemini() {
+			const key = document.getElementById('geminiApiKey').value.trim();
+			if (!key || !groupedStories.length) return;
+			const btn = document.getElementById('geminiEnhanceBtn');
+			btn.disabled = true;
+			btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enhancing...';
+			setStatus('Sending to Gemini...');
+
+			const top60 = allArticles.slice(0,60).map((a,i) => `${i}: ${a.title}`).join('\n');
+			const prompt = `Group these news headlines by story. Headlines in different languages about the same event = same group. Return ONLY a JSON array, no markdown:\n[{"group":0,"indices":[0,3,7],"headline":"Best English headline"},…]\n\nHeadlines:\n${top60}`;
+
+			try {
+				const res = await fetch(
+					`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`,
+					{ method:'POST', headers:{'Content-Type':'application/json'},
+					  body: JSON.stringify({ contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.1,maxOutputTokens:2048} }) }
+				);
+				const data = await res.json();
+				if (data.error) throw new Error(data.error.message);
+				const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+				const match = raw.match(/\[[\s\S]*\]/);
+				if (!match) throw new Error('Invalid response');
+
+				const geminiGroups = JSON.parse(match[0]);
+				const top60a = allArticles.slice(0,60);
+				const usedIdx = new Set(geminiGroups.flatMap(g => g.indices));
+				const newGroups = geminiGroups.map(g => ({
+					headline: g.headline,
+					articles: g.indices.map(i => top60a[i]).filter(Boolean)
+				})).filter(g => g.articles.length);
+
+				top60a.forEach((a,i) => {
+					if (!usedIdx.has(i)) newGroups.push({ headline: a.title, articles: [a] });
+				});
+				newGroups.sort((a,b) => b.articles.length - a.articles.length);
+				renderStoriesEnhanced(newGroups.slice(0,50));
+
+				document.getElementById('statGeminiBadge').innerHTML = '<span class="gemini-badge"><i class="fas fa-magic"></i> Gemini Enhanced</span>';
+				document.getElementById('statStories').textContent = Math.min(newGroups.length,50);
+				document.getElementById('aiSumSummaryBar').classList.add('active');
+				setStatus(`Gemini grouped ${newGroups.length} stories`);
+			} catch(e) {
+				setStatus('Gemini error: ' + e.message);
+			}
+			btn.disabled = false;
+			btn.innerHTML = '<i class="fas fa-magic"></i> Enhance';
+		}
+
+		function buildCategoryHeader(catName, count) {
+			const header = document.createElement('div');
+			header.style.cssText = `
+				padding: 0.6rem 1rem 0.6rem 1.2rem;
+				margin: 1.4rem 0 0.4rem 0;
+				background: rgba(139,92,246,0.08);
+				border-left: 4px solid #a78bfa;
+				border-radius: 0 10px 10px 0;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			`;
+			header.innerHTML = `
+				<span style="font-size:1.1rem; font-weight:700; color:#a78bfa; letter-spacing:0.03em;">${catName}</span>
+				<span style="
+					font-size:0.72rem;
+					font-weight:600;
+					color:#a78bfa;
+					background:rgba(139,92,246,0.12);
+					border:1px solid rgba(167,139,250,0.4);
+					border-radius:20px;
+					padding:0.1rem 0.6rem;
+				">${count} stories</span>
+			`;
+			return header;
+		}
+
+		// ── Render ──
+		function renderStories(groups) {
+			const list = document.getElementById('aiSumList');
+			list.innerHTML = '';
+
+			// Categorize all groups
+			const categorized = {};
+			TOPIC_CATEGORIES.forEach(cat => categorized[cat.name] = []);
+
+			groups.forEach(articles => {
+				const headline = pickHeadline(articles);
+				const category = categorizeStory(headline, articles);
+				if (!categorized[category]) categorized[category] = [];
+				categorized[category].push({ articles, headline });
+			});
+
+			let globalRank = 1;
+
+			// Render in TOPIC_CATEGORIES order (not by count — hierarchy matters)
+			TOPIC_CATEGORIES.forEach(cat => {
+				const categoryGroups = categorized[cat.name];
+				if (!categoryGroups || categoryGroups.length === 0) return;
+
+				// Sort within category by source count, cap at 25
+				const sorted = categoryGroups
+					.sort((a,b) => b.articles.length - a.articles.length)
+					.slice(0, 25);
+
+				// Category header
+				list.appendChild(buildCategoryHeader(cat.name, sorted.length));
+
+				sorted.forEach(({ articles, headline }) => {
+					list.appendChild(buildCard(globalRank++, headline, articles));
+				});
+			});
+		}
+
+		function renderStoriesEnhanced(groups) {
+			const list = document.getElementById('aiSumList');
+			list.innerHTML = '';
+
+			const categorized = {};
+			TOPIC_CATEGORIES.forEach(cat => categorized[cat.name] = []);
+
+			groups.forEach(g => {
+				const category = categorizeStory(g.headline, g.articles);
+				if (!categorized[category]) categorized[category] = [];
+				categorized[category].push(g);
+			});
+
+			let globalRank = 1;
+
+			TOPIC_CATEGORIES.forEach(cat => {
+				const categoryGroups = categorized[cat.name];
+				if (!categoryGroups || categoryGroups.length === 0) return;
+
+				const sorted = categoryGroups
+					.sort((a,b) => b.articles.length - a.articles.length)
+					.slice(0, 25);
+
+				list.appendChild(buildCategoryHeader(cat.name, sorted.length));
+
+				sorted.forEach(g => list.appendChild(buildCard(globalRank++, g.headline, g.articles)));
+			});
+		}
+
+		function buildCard(rank, headline, articles) {
+			const count = articles.length;
+			const badgeClass = count >= 5 ? 'badge-hot' : count >= 3 ? 'badge-warm' : 'badge-normal';
+			const badgeLabel = count >= 5 ? `🟢 ${count} sources` : count >= 3 ? `🟡 ${count} sources` : `🔴 ${count} source${count>1?'s':''}`;
+			const isRTL = /[\u0590-\u05FF\u0600-\u06FF]/.test(headline.slice(0,10));
+
+			const seen = new Set();
+			const unique = articles.filter(a => {
+				const k = a.sourceName; if (seen.has(k)) return false; seen.add(k); return true;
+			});
+
+			const links = unique.map(a =>
+				`<a class="source-link" href="${esc(a.url)}" target="_blank" rel="noopener">
+					${getSourceFlag(a.sourceName)} ${esc(a.sourceName)}
+				</a>`
+			).join('');
+
+			const card = document.createElement('div');
+			card.className = 'story-card';
+			card.dataset.rank = rank;
+			card.innerHTML = `
+				<div class="story-top">
+					<span class="story-rank">#${rank}</span>
+					<span class="story-badge ${badgeClass}">${badgeLabel}</span>
+					<span class="story-headline" dir="${isRTL?'rtl':'ltr'}">${esc(headline)}</span>
+				</div>
+				<div class="story-headline-he" id="he-${rank}">⏳ מתרגם...</div>
+				<div class="story-sources">${links}</div>`;
+
+			// Translation runs after card is in DOM via MutationObserver trick
+			requestAnimationFrame(() => translateToHebrew(headline, rank));
+
+			return card;
+		}
+
+		async function translateToHebrew(text, rank) {
+			// Already Hebrew - no need to translate
+			if (/[\u0590-\u05FF]/.test(text)) {
+				const el = document.getElementById('he-' + rank);
+				if (el) el.textContent = text;
+				return;
+			}
+			try {
+				const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=iw&dt=t&q=${encodeURIComponent(text)}`;
+				const res = await fetch(url);
+				const data = await res.json();
+				// Response structure: [[[translatedText, originalText, ...],...],...]
+				const translated = data[0].reduce((acc, seg) => acc + (seg[0] || ''), '');
+				const el = document.getElementById('he-' + rank);
+				if (el) el.textContent = translated || '';
+			} catch(e) {
+				const el = document.getElementById('he-' + rank);
+				if (el) el.textContent = '';
+			}
+		}
+
+		function pickHeadline(articles) {
+			const eng = articles.filter(a => !/[\u0590-\u05FF\u0600-\u06FF]/.test(a.title));
+			const pool = eng.length ? eng : articles;
+			return pool.reduce((b,a) => a.title.length > b.title.length ? a : b, pool[0]).title;
+		}
+
+		// ── Utils ──
+		function fetchWithProxy(url) {
+			return fetchWithTimeout(url, 8000);
+		}
+		function fetchWithTimeout(url, ms, options={}) {
+			const ctrl = new AbortController();
+			const id = setTimeout(() => ctrl.abort(), ms);
+			return fetch(url, { ...options, signal: ctrl.signal }).finally(() => clearTimeout(id));
+		}
+		function decodeEntities(str) {
+			const t = document.createElement('textarea'); t.innerHTML = str; return t.value;
+		}
+		function extractDomain(url) {
+			try { return new URL(url).hostname.replace('www.',''); } catch(e) { return url; }
+		}
+		function esc(str) {
+			return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+		}
+		function setStatus(msg)   { document.getElementById('aiSumStatus').textContent   = msg; }
+		function setProgress(msg) { document.getElementById('aiSumProgress').textContent = msg; }
+
+		document.getElementById('aiSumOverlay').addEventListener('click', function(e) {
+			if (e.target === this) closeAiSum();
+		});
+		
+		document.getElementById('geminiApiKey').addEventListener('input', function() {
+				document.getElementById('geminiEnhanceBtn').disabled =
+					this.value.trim().length < 10 || groupedStories.length === 0;
+			});
+			
+	</script>
+
+
+
 </body>
 </html>
