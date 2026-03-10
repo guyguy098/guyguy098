@@ -1,7 +1,6 @@
 const CORS_PROXIES = [
-	{ prefix: 'https://api.allorigins.win/raw?url=', encode: true },
-	{ prefix: 'https://corsproxy.io/?url=',          encode: true },
-	{ prefix: 'https://api.codetabs.com/v1/proxy?quest=', encode: false },
+	{ prefix: 'https://corsproxy.io/?url=',                encode: true },
+	{ prefix: 'https://api.allorigins.hexlet.app/raw?url=', encode: true },
 ];
 
 const GDELT_URL = 'https://api.gdeltproject.org/api/v2/doc/doc?' +
@@ -647,4 +646,5 @@ document.getElementById('aiSumOverlay').addEventListener('click', function(e) {
 document.getElementById('geminiApiKey').addEventListener('input', function() {
 		document.getElementById('geminiEnhanceBtn').disabled =
 			this.value.trim().length < 10 || groupedStories.length === 0;
+
 	});
