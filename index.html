@@ -590,6 +590,14 @@
 						<div class="custom-dropdown-item disabled">🚨 Alerts 🚨</div>
 						<div class="custom-dropdown-item" onclick="openUrl('https://www.tzevaadom.co.il/', 'newsSitesDropdown')">Tzofar - Tzeva Adom</div>
 						<div class="custom-dropdown-item" onclick="openUrl('https://www.oref.org.il/heb', 'newsSitesDropdown')">Pikud Ha-oref</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://tzevadom.com/summary', 'newsSitesDropdown')">Tzofar - Summary</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://www.oref.org.il/heb/alerts-history', 'newsSitesDropdown')">Pikud Ha-oref history</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://oct7database.com/index.html', 'newsSitesDropdown')">7.10 murdered list</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://www.tzevaadom.co.il/historical/', 'newsSitesDropdown')">Tzofar - history</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://kula.co.il/war-room', 'newsSitesDropdown')">Kula</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://www.inss.org.il/he/publication/lions-roar-map/', 'newsSitesDropdown')">INSS lion roar map</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://www.iris.edu/app/seismic-monitor/map?lat=32.9713&lng=59.4868&zoom=6', 'newsSitesDropdown')">Sage- Sismic monitor - Iran</div>
+						<div class="custom-dropdown-item" onclick="openUrl('https://earthquakes.berkeley.edu/seismo.real.time.map.html', 'newsSitesDropdown')">Berkeley- Sismic monitor - Iran</div>
 						<div class="custom-dropdown-item separator"></div>
 						<div class="custom-dropdown-item disabled">🇮🇱 Israeli</div>
 						<div class="custom-dropdown-item" onclick="openUrl('https://www.0404.co.il/', 'newsSitesDropdown')">0404</div>
@@ -796,21 +804,21 @@
 				
 				<div style="margin-top:1.25rem;margin-bottom:1.25rem;border-top:1px solid rgba(255,255,255,0.08);"></div>
 
-				<button onclick="openAiSum(); closeMobileMenu();" style="width:100%;padding:0.75rem;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.35);border-radius:8px;color:#60a5fa;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+				<button onclick="closeMobileMenu(); openAiSum();" style="width:100%;padding:0.75rem;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.35);border-radius:8px;color:#60a5fa;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
 					<i class="fas fa-robot"></i> AI News Summary
 				</button>
 
-				<button onclick="openAlertAnalytics(); closeMobileMenu();" style="margin-top:0.75rem;width:100%;padding:0.75rem;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:8px;color:#f87171;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+				<button onclick="closeMobileMenu(); openAlertAnalytics();" style="margin-top:0.75rem;width:100%;padding:0.75rem;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:8px;color:#f87171;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
 					<i class="fas fa-rocket"></i> Israel Alert Analytics
 				</button>
 				
-				<button onclick="openIranAttacks(); closeMobileMenu();" style="margin-top:0.5rem;width:100%;padding:0.75rem;background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.35);border-radius:8px;color:#fb923c;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+				<button onclick="closeMobileMenu(); openIranAttacks();" style="margin-top:0.5rem;width:100%;padding:0.75rem;background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.35);border-radius:8px;color:#fb923c;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
 					<i class="fas fa-globe"></i> Iran's Attacks Since 28/2/2026
 				</button>
 				
 				<div style="margin-top:1.25rem;margin-bottom:1.25rem;border-top:1px solid rgba(255,255,255,0.08);"></div>
 
-				<button onclick="openArsenal('iran'); closeMobileMenu();" style="margin-top:0.5rem;width:100%;padding:0.75rem;background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.35);border-radius:8px;color:#a78bfa;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+				<button onclick="closeMobileMenu(); openArsenal('iran');" style="margin-top:0.5rem;width:100%;padding:0.75rem;background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.35);border-radius:8px;color:#a78bfa;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
 					<i class="fas fa-bomb"></i> Main Arsenal vs Israel
 				</button>	
 				
@@ -877,8 +885,8 @@
 			</div>
 			<!-- Tabs -->
 			<div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.08);padding:0 1.5rem;">
-				<button id="arsenalTabIran" onclick="switchArsenalTab('iran')" style="padding:0.6rem 1.2rem;background:none;border:none;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;"><img src="flags/ir.png" style="width:20px;height:14px;border-radius:2px;object-fit:cover;"> Iran</button>
-				<button id="arsenalTabHizbollah" onclick="switchArsenalTab('hizbollah')" style="padding:0.6rem 1.2rem;background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,0.35);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;"><img src="flags/Hezbollah.png" style="width:20px;height:14px;border-radius:2px;object-fit:cover;"> Hezbollah</button>
+				<button id="arsenalTabIran" onclick="switchArsenalTab('iran')" style="padding:0.6rem 1.2rem;background:none;border:none;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;"><img src="flags/ir.png" style="width:20px;height:14px;border-radius:2px;object-fit:cover;"> Iran</button>
+				<button id="arsenalTabHizbollah" onclick="switchArsenalTab('hizbollah')" style="padding:0.6rem 1.2rem;background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,0.35);font-size:1.1rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;"><img src="flags/Hezbollah.png" style="width:20px;height:14px;border-radius:2px;object-fit:cover;"> Hezbollah</button>
 			</div>
 			<div id="iranArsenalContent" style="padding:1.5rem;overflow:visible;"></div>
 			<div id="hezbollahArsenalContent" style="padding:1.5rem;display:none;"></div>
