@@ -140,9 +140,9 @@ async function structureWithGemini(articles, existingData) {
 		: '';
 
 	// Trim articles for token limits
-	const articleText = articles.slice(0, 80).map((a, i) =>
-		`[${i + 1}] ${a.date || ''} | ${a.source || ''} | ${a.title}\n${a.snippet || ''}`
-	).join('\n\n');
+	const articleText = articles.slice(0, 40).map((a, i) =>
+		`[${i + 1}] ${a.date || ''} | ${a.source || ''} | ${a.title}`
+	).join('\n');
 
 	const prompt = `You are a military analyst. Today is ${today}. Below are news articles about Iran's attacks on other countries since February 28, 2026.
 
@@ -179,20 +179,32 @@ Schema:
 
 Color map: Israel=#fbbf24, UAE=#f87171, Saudi Arabia=#fb923c, Bahrain=#60a5fa, Qatar=#a78bfa, Kuwait=#34d399, Jordan=#e879f9, Oman=#2dd4bf, Red Sea / Ships=#38bdf8, Iraq=#a3e635, Syria=#e11d48`;
 
-	const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+	const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
 	try {
-		const resp = await fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				contents: [{ parts: [{ text: prompt }] }],
-				generationConfig: {
-					temperature: 0.1,
-					maxOutputTokens: 8192,
-				},
-			}),
+		const body = JSON.stringify({
+			contents: [{ parts: [{ text: prompt }] }],
+			generationConfig: {
+				temperature: 0.1,
+				maxOutputTokens: 8192,
+			},
 		});
+
+		let resp = null;
+		for (let attempt = 0; attempt < 3; attempt++) {
+			resp = await fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body,
+			});
+			if (resp.status === 429) {
+				const wait = (attempt + 1) * 30;
+				console.log(`Rate limited, waiting ${wait}s before retry ${attempt + 2}/3...`);
+				await new Promise(r => setTimeout(r, wait * 1000));
+				continue;
+			}
+			break;
+		}
 
 		if (!resp.ok) {
 			const err = await resp.text();
