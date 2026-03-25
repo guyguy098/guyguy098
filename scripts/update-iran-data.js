@@ -135,8 +135,9 @@ async function structureWithGemini(articles, existingData) {
 	const today = new Date().toISOString().split('T')[0];
 
 	// Provide existing data as context so Gemini can update/merge
+	// Only send country names + event count to save tokens (not full data)
 	const existingSummary = existingData
-		? `\n\nEXISTING DATA (update/add to this — do NOT remove confirmed events):\n${JSON.stringify(existingData, null, 0)}`
+		? `\n\nEXISTING DATA SUMMARY (preserve all existing events, only ADD new ones):\n${existingData.map(c => `${c.name}: ${c.events.length} events, latest: ${c.events[c.events.length-1]?.ts || '?'}`).join('\n')}\n\nFull existing data:\n${JSON.stringify(existingData, null, 0).slice(0, 3000)}`
 		: '';
 
 	// Trim articles for token limits
@@ -271,6 +272,18 @@ async function main() {
 		console.log('No existing data file found, starting fresh.');
 	}
 
+	// Skip Gemini if last successful update was less than 3 hours ago
+	try {
+		const raw = fs.readFileSync(DATA_FILE, 'utf-8');
+		const parsed = JSON.parse(raw);
+		const lastUpdate = new Date(parsed.updated).getTime();
+		const hoursSince = (Date.now() - lastUpdate) / 3600000;
+		if (hoursSince < 3 && parsed.articles_processed > 0 && existingData) {
+			console.log(`Last successful Gemini update was ${hoursSince.toFixed(1)}h ago. Skipping to save quota.`);
+			process.exit(0);
+		}
+	} catch(e) {}
+	
 	// Fetch from sources
 	console.log('\nFetching GDELT...');
 	const gdeltArticles = await fetchGDELT();
