@@ -2,7 +2,7 @@ name: Update Iran Attack Data
 
 on:
   schedule:
-    - cron: '0 */1 * * *'   # Every 1 hours
+    - cron: '0 */4 * * *'   # Every 4 hours
   workflow_dispatch:          # Manual trigger from GitHub UI
 
 permissions:
