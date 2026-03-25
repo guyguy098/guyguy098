@@ -272,13 +272,13 @@ async function main() {
 		console.log('No existing data file found, starting fresh.');
 	}
 
-	// Skip Gemini if last successful update was less than 3 hours ago
+	// Skip if Gemini succeeded less than 3 hours ago
 	try {
 		const raw = fs.readFileSync(DATA_FILE, 'utf-8');
 		const parsed = JSON.parse(raw);
 		const lastUpdate = new Date(parsed.updated).getTime();
 		const hoursSince = (Date.now() - lastUpdate) / 3600000;
-		if (hoursSince < 3 && parsed.articles_processed > 0 && existingData) {
+		if (hoursSince < 3 && parsed.gemini_success === true && existingData) {
 			console.log(`Last successful Gemini update was ${hoursSince.toFixed(1)}h ago. Skipping to save quota.`);
 			process.exit(0);
 		}
@@ -332,10 +332,12 @@ async function main() {
 	console.log(`\nFinal: ${finalData.length} countries, ${totalEvents} events`);
 
 	// Write output
+	const geminiWorked = structuredData !== null;
 	const output = {
 		updated: new Date().toISOString(),
 		source: 'GDELT + RSS + Gemini',
 		articles_processed: unique.length,
+		gemini_success: geminiWorked,
 		countries: finalData,
 	};
 
