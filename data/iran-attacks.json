@@ -1,7 +1,8 @@
 {
-  "updated": "2026-03-25T02:23:40.300Z",
+  "updated": "2026-03-25T02:52:16.385Z",
   "source": "GDELT + RSS + Gemini",
-  "articles_processed": 249,
+  "articles_processed": 193,
+  "gemini_success": false,
   "countries": [
     {
       "name": "Israel",
