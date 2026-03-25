@@ -94,33 +94,31 @@ async function main() {
     console.log('\nFetching IDF Spokesperson Telegram...');
     try {
         const tgResp = await fetch(TG_URL, {
-            headers: { 'User-Agent': 'TatzpitBot/1.0' },
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
             signal: AbortSignal.timeout(15000),
         });
         if (!tgResp.ok) throw new Error(`HTTP ${tgResp.status}`);
         const tgHtml = await tgResp.text();
+        console.log(`Telegram page fetched: ${tgHtml.length} chars`);
 
-        // Parse messages from Telegram public page HTML
+        // Extract entire message blocks (more robust than separate regex)
         const messages = [];
-        const msgRegex = /<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/gi;
-        const timeRegex = /<time[^>]*datetime="([^"]*)"[^>]*>/gi;
+        const blockRegex = /<div class="tgme_widget_message "[^>]*data-post="([^"]*)"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*<\/div>/gi;
+        
+        // Simpler approach: find all message texts and timestamps by scanning the HTML
+        // Split by message boundary
+        const msgParts = tgHtml.split('tgme_widget_message_bubble');
+        console.log(`Found ${msgParts.length - 1} message bubbles`);
 
-        // Extract all timestamps
-        const timestamps = [];
-        let timeMatch;
-        while ((timeMatch = timeRegex.exec(tgHtml)) !== null) {
-            timestamps.push(timeMatch[1]);
-        }
+        for (let i = 1; i < msgParts.length; i++) {
+            const part = msgParts[i];
 
-        // Extract all message texts
-        let msgMatch;
-        let msgIndex = 0;
-        const keywords = /intercept|rocket|missile|launched|fired|UAV|drone|projectile|aerial|threat|iron dome|שיגור|יירוט|רקט/i;
-        const numberRx = /(\d+)\s*(rocket|missile|projectile|UAV|drone|aerial)/gi;
-        const interceptRx = /intercept(?:ed)?\s+(\d+)/gi;
+            // Extract text content
+            const textMatch = part.match(/js-message_text[^>]*>([\s\S]*?)<\/div>/i)
+                           || part.match(/tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/i);
+            if (!textMatch) continue;
 
-        while ((msgMatch = msgRegex.exec(tgHtml)) !== null) {
-            const rawText = msgMatch[1]
+            let text = textMatch[1]
                 .replace(/<br\s*\/?>/gi, '\n')
                 .replace(/<[^>]+>/g, '')
                 .replace(/&amp;/g, '&')
@@ -128,33 +126,48 @@ async function main() {
                 .replace(/&gt;/g, '>')
                 .replace(/&quot;/g, '"')
                 .replace(/&#039;/g, "'")
+                .replace(/\n{3,}/g, '\n\n')
                 .trim();
 
-            if (keywords.test(rawText) && messages.length < 10) {
-                const nums = [];
-                const m1 = [...rawText.matchAll(numberRx)];
-                const m2 = [...rawText.matchAll(interceptRx)];
-                m1.forEach(m => nums.push(m[0]));
-                m2.forEach(m => nums.push('intercepted ' + m[1]));
+            if (text.length < 10) continue;
 
-                messages.push({
-                    text: rawText.slice(0, 300),
-                    nums,
-                    ts: timestamps[msgIndex] || null,
-                });
+            // Extract timestamp
+            const timeMatch = part.match(/<time[^>]*datetime="([^"]*)"/i);
+            const ts = timeMatch ? timeMatch[1] : null;
+
+            // Extract numbers about rockets/missiles/interceptions (works for both Hebrew and English)
+            const nums = [];
+            const numberPatterns = [
+                /(\d+)\s*(rocket|missile|projectile|UAV|drone|aerial)/gi,
+                /intercept(?:ed)?\s+(\d+)/gi,
+                /(\d+)\s*(רקט|טיל|כטב"מ|שיגור|יירוט)/gi,
+                /(יירט|יורט|שוגר|שוגרו)\s*(\d+)/gi,
+            ];
+            for (const rx of numberPatterns) {
+                for (const m of text.matchAll(rx)) {
+                    nums.push(m[0]);
+                }
             }
-            msgIndex++;
+
+            messages.push({
+                text: text.slice(0, 300),
+                nums,
+                ts,
+            });
         }
+
+        // Keep last 15 messages (no keyword filtering — everything from IDF channel is relevant)
+        const recent = messages.slice(-15).reverse();
 
         const tgOutput = {
             updated: new Date().toISOString(),
             source: 'IDF Spokesperson Telegram',
-            message_count: messages.length,
-            messages,
+            message_count: recent.length,
+            messages: recent,
         };
 
         fs.writeFileSync(TELEGRAM_FILE, JSON.stringify(tgOutput, null, 2));
-        console.log(`Written ${messages.length} intercept messages to ${TELEGRAM_FILE}`);
+        console.log(`Written ${recent.length} messages to ${TELEGRAM_FILE}`);
     } catch (e) {
         console.warn('Telegram fetch failed:', e.message);
         // Don't fail the whole pipeline — alerts are more important
