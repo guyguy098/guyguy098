@@ -600,9 +600,8 @@ function buildIranMap() {
 
 	// Draw Iran border
 	const iranNominatim = encodeURIComponent('Iran');
-	fetch(`https://nominatim.openstreetmap.org/search?q=${iranNominatim}&polygon_geojson=1&format=json&limit=1&featuretype=country`, {
-		headers: { 'Accept-Language':'en', 'User-Agent':'TatzpitMap/1.0' }
-	})
+	const _nomUrl1 = `https://nominatim.openstreetmap.org/search?q=${iranNominatim}&polygon_geojson=1&format=json&limit=1&featuretype=country`;
+	fetch((typeof CORS_PROXY !== 'undefined' && CORS_PROXY) ? CORS_PROXY + encodeURIComponent(_nomUrl1) : _nomUrl1)
 	.then(r => r.json())
 	.then(results => {
 		if (_iranMapGen !== myMapGen) return;
@@ -619,9 +618,8 @@ function buildIranMap() {
 		const center = countryCenters[country.name];
 		if (!center) continue;
 		const qname = encodeURIComponent(country.name === 'UAE' ? 'United Arab Emirates' : country.name);
-		fetch(`https://nominatim.openstreetmap.org/search?q=${qname}&polygon_geojson=1&format=json&limit=1&featuretype=country`, {
-			headers: { 'Accept-Language':'en', 'User-Agent':'TatzpitMap/1.0' }
-		})
+		const _nomUrl2 = `https://nominatim.openstreetmap.org/search?q=${qname}&polygon_geojson=1&format=json&limit=1&featuretype=country`;
+		fetch((typeof CORS_PROXY !== 'undefined' && CORS_PROXY) ? CORS_PROXY + encodeURIComponent(_nomUrl2) : _nomUrl2)
 		.then(r => r.json())
 		.then(results => {
 			if (_iranMapGen !== myMapGen) return;
