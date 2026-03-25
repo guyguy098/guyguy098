@@ -83,7 +83,8 @@ const IRAN_GDELT_QUERIES = [
 async function _iranFetchGDELT() {
 	const articles = [];
 	for (const q of IRAN_GDELT_QUERIES) {
-		const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=artlist&maxrecords=40&format=json&timespan=14d&sort=hybridrel`;
+		const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=artlist&maxrecords=40&format=json&timespan=14d&sort=hybridrel`;
+		const url = (typeof CORS_PROXY !== 'undefined' && CORS_PROXY) ? CORS_PROXY + encodeURIComponent(gdeltUrl) : gdeltUrl;
 		try {
 			const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
 			if (!resp.ok) continue;
