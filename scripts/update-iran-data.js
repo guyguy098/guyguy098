@@ -34,7 +34,7 @@ const GDELT_QUERIES = [
 async function fetchGDELT() {
 	const articles = [];
 	for (const q of GDELT_QUERIES) {
-		const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=artlist&maxrecords=50&format=json&timespan=7d&sort=hybridrel`;
+		const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=artlist&maxrecords=50&format=json&timespan=30d&sort=hybridrel`;
 		try {
 			const resp = await fetch(url);
 			if (!resp.ok) continue;
@@ -135,31 +135,36 @@ async function structureWithGemini(articles, existingData) {
 	const today = new Date().toISOString().split('T')[0];
 
 	// Provide existing data as context so Gemini can update/merge
-	// Only send country names + event count to save tokens (not full data)
+	// Send compact summary: latest event date per country so Gemini knows what's already covered
 	const existingSummary = existingData
-		? `\n\nEXISTING DATA SUMMARY (preserve all existing events, only ADD new ones):\n${existingData.map(c => `${c.name}: ${c.events.length} events, latest: ${c.events[c.events.length-1]?.ts || '?'}`).join('\n')}\n\nFull existing data:\n${JSON.stringify(existingData, null, 0).slice(0, 3000)}`
+		? `\n\nEXISTING EVENTS ALREADY IN DATABASE (keep all of these, ADD any new events AFTER these dates):\n${existingData.map(c => {
+			const sorted = c.events.sort((a,b) => a.ts.localeCompare(b.ts));
+			const latest = sorted[sorted.length - 1];
+			return `${c.name} (${c.color}): ${c.events.length} events, latest on ${latest?.ts || '?'} at ${latest?.location_name || '?'}`;
+		}).join('\n')}\n\nFull existing JSON:\n${JSON.stringify(existingData, null, 0)}`
 		: '';
 
 	// Trim articles for token limits
-	const articleText = articles.slice(0, 40).map((a, i) =>
-		`[${i + 1}] ${a.date || ''} | ${a.source || ''} | ${a.title}`
+	const articleText = articles.slice(0, 60).map((a, i) =>
+		`[${i + 1}] ${a.date || ''} | ${a.source || ''} | ${a.title}${a.snippet ? ' — ' + a.snippet.slice(0, 100) : ''}`
 	).join('\n');
 
-	const prompt = `You are a military analyst. Today is ${today}. Below are news articles about Iran's attacks on other countries since February 28, 2026.
+	const prompt = `You are a military analyst building a comprehensive attack database. Today is ${today}.
 
-ARTICLES:
+ARTICLES FROM NEWS SOURCES:
 ${articleText}
 ${existingSummary}
 
-TASK: Return a complete, updated JSON array of ALL confirmed Iran attacks since 2026-02-28. Merge new information from the articles with the existing data. Add new events, update casualty counts if new information is available, but NEVER remove confirmed events.
+YOUR TASK:
+1. Return the COMPLETE existing database with ALL old events preserved exactly as they are.
+2. SCAN every article carefully for ANY new Iran-related attack, strike, missile launch, drone attack, or military action since the last recorded event for each country.
+3. ADD any new events you find. Even if details are limited, add the event with best-available information.
+4. Look for attacks on ANY country, not just the ones already in the database. If Iran attacked a new country (e.g., Turkey, Iraq, Cyprus, Pakistan, Afghanistan), add a new country entry.
+5. If an article mentions ongoing daily attacks (e.g., "Iran continued drone strikes on UAE for the 10th day"), infer the missing daily events and add them.
 
-CRITICAL RULES:
-- Only include CONFIRMED attacks (reported by 2+ credible sources)
-- Every event MUST have real lat/lng coordinates of the actual location hit
-- Use Israel timezone (+02:00) for timestamps
-- Keep detail field factual, 1-2 sentences max
+CRITICAL: The database currently stops around early March 2026. There are almost certainly MORE events between then and today (${today}). Find them in the articles and ADD them. Do NOT return only the old events.
 
-Return ONLY valid JSON, no markdown fences, no explanation.
+Return ONLY valid JSON array, no markdown, no explanation.
 
 Schema:
 [{
@@ -171,14 +176,14 @@ Schema:
     "targets": ["Military base"|"Residential"|"Airport"|"Port"|"Hotel"|"Ship"|"Embassy/Consulate"|"Radar station"|"Data center"|"Industrial"],
     "counts": {"missiles": N, "drones": N},
     "cas": {"k": N, "i": N},
-    "lat": 25.2532,
-    "lng": 55.3657,
+    "lat": 0.0,
+    "lng": 0.0,
     "location_name": "Specific place name",
     "detail": "1-2 sentence factual description"
   }]
 }]
 
-Color map: Israel=#fbbf24, UAE=#f87171, Saudi Arabia=#fb923c, Bahrain=#60a5fa, Qatar=#a78bfa, Kuwait=#34d399, Jordan=#e879f9, Oman=#2dd4bf, Red Sea / Ships=#38bdf8, Iraq=#a3e635, Syria=#e11d48`;
+Color map: Israel=#fbbf24, UAE=#f87171, Saudi Arabia=#fb923c, Bahrain=#60a5fa, Qatar=#a78bfa, Kuwait=#34d399, Jordan=#e879f9, Oman=#2dd4bf, Red Sea / Ships=#38bdf8, Iraq=#a3e635, Syria=#e11d48, Turkey=#ef4444, Cyprus=#94a3b8, Pakistan=#22d3ee`;
 
 	const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -186,8 +191,8 @@ Color map: Israel=#fbbf24, UAE=#f87171, Saudi Arabia=#fb923c, Bahrain=#60a5fa, Q
 		const body = JSON.stringify({
 			contents: [{ parts: [{ text: prompt }] }],
 			generationConfig: {
-				temperature: 0.1,
-				maxOutputTokens: 8192,
+				temperature: 0.2,
+				maxOutputTokens: 16384,
 			},
 		});
 
