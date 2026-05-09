@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-09T09:07:53.432Z",
+  "updated": "2026-05-09T12:49:04.542Z",
   "source": "GDELT + RSS + Gemini",
-  "articles_processed": 293,
+  "articles_processed": 156,
   "gemini_success": false,
   "countries": [
     {
